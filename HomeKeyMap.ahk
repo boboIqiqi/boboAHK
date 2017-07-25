@@ -40,17 +40,6 @@ Capslock::Ctrl
     ^n::Send {Down}
 #IfWinNotActive
 
-;^F2::
-;    run "C:\software\RomZhuShou\MoGuRomZhuShou_m.exe"
-;    winwait ahk_exe MoGuRomZhuShou_m.exe
-;    click 478, 531
-;    sleep,500
-;    click 583, 652
-;    sleep,500
-;    send C:\Users\Bob\Desktop\4G调试\ExpectedValue\system.img{Enter}
-;    sleep,500
-;    click 1029, 651
-;    return 
 
 ;关闭对话框，改成Alt+4离主键盘更近
 !4::Send, !{F4}

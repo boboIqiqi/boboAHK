@@ -22,11 +22,6 @@ SetWorkingDir %A_ScriptDir%
 ; $ 前缀相当于在此热键定义之前的某个位置指定了 #UseHook。
 ; UP 可以跟在热键名后面使得在释放按键时触发热键, 而不是按下时. 下面的例子把 LWin 重映射 为 LControl: *LWin::Send {LControl Down} *LWin Up::Send {LControl Up}
 
-;GrouGroup, ahk_exe notepad++.exe ; NotePad
-;GrouGroup, ahk_exe TortoiseProc.exe
-;#Inc_ScriptDir%\vim.ahk
-;#Inc_ScriptDir%\vim_ime.ahk
-
 GroupAdd, NeedCtrlN_P, ahk_class Vim
 GroupAdd, NeedCtrlN_P, ahk_exe Wiz.exe 
 GroupAdd, NeedCtrlN_P, ahk_class Photoshop
@@ -39,18 +34,6 @@ Capslock::Ctrl
     ^p::Send {Up}
     ^n::Send {Down}
 #IfWinNotActive
-
-;^F2::
-;    run "C:\software\RomZhuShou\MoGuRomZhuShou_m.exe"
-;    winwait ahk_exe MoGuRomZhuShou_m.exe
-;    click 478, 531
-;    sleep,500
-;    click 583, 652
-;    sleep,500
-;    send C:\Users\Bob\Desktop\4G调试\ExpectedValue\system.img{Enter}
-;    sleep,500
-;    click 1029, 651
-;    return 
 
 ;关闭对话框，改成Alt+4离主键盘更近
 !4::Send, !{F4}
@@ -99,8 +82,7 @@ Capslock::Ctrl
     ^s:: send {ESC}:wa{Enter}
 #ifWinActive
 
-;#ifWinActive ahk_exe Wiz.exe
-#ifWinActive ahk_class WizNoteMainFrame
+#ifWinActive ahk_exe Wiz.exe
     ;Wiz笔记中^n是用来创建新的笔记的，而且其中也很少用于上下键
     ;Hotkey, *^n up,off
 
@@ -144,10 +126,6 @@ Capslock::Ctrl
     ;Hotkey, *^n up,off
 #IfWinActive
 
-
-;SVN提交窗口，要用到退格键
-;#IfWinActive ahk_class #32770
-
 ;在Eclipse下，映射相关按键
 #IfWinActive ahk_exe eclipse.exe
 ;$=::send {ESC}{=}
@@ -168,18 +146,11 @@ Capslock::Ctrl
 
 #ifWinActive
 
-;Firefox
-;#IfWinActive ahk_class MozillaWindowClass
-
-;Windows命令行
-;#IfWinActive ahk_class ConsoleWindowClass
-
 ^!r::
     send {ESC}:update{Enter}
     Reload  ; 设定 Ctrl-Alt-R 热键来重启脚本.
 return 
 
-^!a:: run totalcmd.exe /O C:\eDisk\13-4G\4Gv2\SecSuit\proj\Linux\auditserver
 ^!d:: run "C:/Launcher/RemoveDrive.lnk"
 ^!e::Edit  ; 设定 Ctrl-Alt-E 热键来编辑脚本
 ^!v:: run "C:\launcher\Everything.lnk"
@@ -196,37 +167,9 @@ return
     send adb shell{Enter}cd /data/local/sdt/mdm/policy{Enter}
 return
 
-^!w:: 
-    Run C:\software\RomZhuShou\MoGuRomZhuShou_m.exe
-    ;winwait ROM助手
-    ;click 462, 509
-    ;sleep 1000
-    ;click 764, 638
-    ;send zz\2.1_k8s_zz_system.img
-return
-^!h:: Run totalcmd.exe /O C:\eDisk\13-4G\4Gv2\SecSuit\proj\commands
-;^!h:: Run C:\eDisk\13-4G\4Gv2\SecSuit\proj\build-ProjectManager-Desktop_Qt_5_2_1_MinGW_32bit-Debug\commands\可信签名
-
 ^!s:: Run C:\eDisk\13-4G\4Gv2\SecSuit
 ^F1:: Run Shutdown -h   ;自动进入休眠状态
-;^!m:: Run, %ComSpec% /c touch 1.txt
-;^!m:: Run, %ComSpec% /k touch 1.txt
-;:://g::   
-;Run http://www.google.com    
-;msgbox % "asdf" . ProgramFiles  ;引用系统的环境变量
-;return 
 
-Numpad1::
-    Run, "C:\eDisk\13-4G\4Gv2\SecSuit\proj\Linux\auditserver\CommitHere.bat"
-return
-
-Numpad2::
-    Run, "C:\eDisk\13-4G\4Gv2\SecSuit\proj\TrustApps\commit here.bat"
-return
-
-Numpad3::
-    Run, "C:\eDisk\13-4G\4Gv2\SecSuit\proj\TrustSign\commit here.bat"
-return
 
 ^!i::
     SetWorkingDir %A_ScriptDir%
