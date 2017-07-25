@@ -28,6 +28,7 @@ SetWorkingDir %A_ScriptDir%
 
 ^!a:: run totalcmd.exe /O C:\eDisk\13-4G\4Gv2\SecSuit\proj\Linux\auditserver
 ^!h:: Run totalcmd.exe /O C:\eDisk\13-4G\4Gv2\SecSuit\proj\commands
+^!s:: Run C:\eDisk\13-4G\4Gv2\SecSuit
 
 ;^!h:: Run C:\eDisk\13-4G\4Gv2\SecSuit\proj\build-ProjectManager-Desktop_Qt_5_2_1_MinGW_32bit-Debug\commands\可信签名
 

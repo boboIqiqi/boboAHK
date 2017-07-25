@@ -155,8 +155,7 @@ return
 ^!e::Edit  ; 设定 Ctrl-Alt-E 热键来编辑脚本
 ^!v:: run "C:\launcher\Everything.lnk"
 ^!f:: ActivateAndOpen("Mozilla Firefox","c:/Launcher/Firefox.lnk")
-;^!c:: run "c:/Launcher/FreeCommander XE.lnk"    
-;^!g:: run "C:\Program Files\Lingoes\Translator2\Lingoes.exe"
+^!w:: ActivateAndOpen("Microsoft Word", "c:/Launcher/Word.lnk")
 ^!g:: run Lingoes.lnk
 ^!l:: Run C:\MyNote\软件\hhkb键位\viewLog.bat
 ^!t:: Activate("Total Commander 9.0a - NOT REGISTERED")
@@ -167,7 +166,6 @@ return
     send adb shell{Enter}cd /data/local/sdt/mdm/policy{Enter}
 return
 
-^!s:: Run C:\eDisk\13-4G\4Gv2\SecSuit
 ^F1:: Run Shutdown -h   ;自动进入休眠状态
 
 
