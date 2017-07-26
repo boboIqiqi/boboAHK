@@ -166,7 +166,7 @@ return
     send adb shell{Enter}cd /data/local/sdt/mdm/policy{Enter}
 return
 
-^F1:: Run Shutdown -h   ;自动进入休眠状态
+^!F1:: Run Shutdown -h   ;自动进入休眠状态
 
 
 ^!i::
