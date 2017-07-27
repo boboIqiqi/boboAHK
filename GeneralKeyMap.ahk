@@ -28,6 +28,7 @@ GroupAdd, NeedCtrlN_P, ahk_class Photoshop
 GroupAdd, NeedCtrlN_P, ahk_exe totalcmd.exe
 
 GroupAdd, NeedCtrlB, ahk_exe WINWORD.EXE
+GroupAdd, NeedCtrlB, ahk_exe TOTALCMD.EXE
 Capslock::Ctrl
 
 #IfWinNotActive ,ahk_group NeedCtrlN_P
