@@ -26,20 +26,26 @@ SetWorkingDir %A_ScriptDir%
 ;    return 
 
 
-^!a:: run totalcmd.exe /O C:\eDisk\13-4G\4Gv2\SecSuit\proj\Linux\auditserver
+;^!a:: run totalcmd.exe /O C:\eDisk\13-4G\4Gv2\SecSuit\proj\Linux\auditserver
 ^!h:: Run totalcmd.exe /O C:\eDisk\13-4G\4Gv2\SecSuit\proj\commands
 ^!s:: Run C:\eDisk\13-4G\4Gv2\SecSuit
 
 ;^!h:: Run C:\eDisk\13-4G\4Gv2\SecSuit\proj\build-ProjectManager-Desktop_Qt_5_2_1_MinGW_32bit-Debug\commands\可信签名
 
 Numpad1::
-    Run, "C:\eDisk\13-4G\4Gv2\SecSuit\proj\Linux\auditserver\CommitHere.bat"
+    ;Run, "c:\eDisk\13-4G\4Gv2\SecSuit\proj\FileExplorerTabActivity\CommitHere.bat"
+    ;Run, "C:\eDisk\13-4G\4Gv2\SecSuit\proj\Linux\auditserver\CommitHere.bat"
+    Run "c:\eDisk\13-4G\4Gv2\SecSuit\ko\sdt_software_control\CommitHere.bat"
 return
 
 Numpad2::
-    Run, "C:\eDisk\13-4G\4Gv2\SecSuit\proj\TrustApps\commit here.bat"
+    Run, "c:\eDisk\13-4G\4Gv2\SecSuit\proj\Klyz\commitHere.bat"
 return
 
 Numpad3::
-    Run, "C:\eDisk\13-4G\4Gv2\SecSuit\proj\TrustSign\commit here.bat"
+    Run, "c:\eDisk\13-4G\4Gv2\SecSuit\proj\TrustSign\CommitHere.bat"
+return
+
+Numpad5::
+    send adb shell setprop debug.rootbackdoor 1{Enter}
 return

@@ -25,17 +25,20 @@ SetWorkingDir %A_ScriptDir%
 GroupAdd, NeedCtrlN_P, ahk_class Vim
 GroupAdd, NeedCtrlN_P, ahk_exe Wiz.exe 
 GroupAdd, NeedCtrlN_P, ahk_class Photoshop
-GroupAdd, NeedCtrlN_P, ahk_exe totalcmd.exe
+;GroupAdd, NeedCtrlN_P, ahk_exe totalcmd.exe
 
 GroupAdd, NeedCtrlB, ahk_exe WINWORD.EXE
 GroupAdd, NeedCtrlB, ahk_exe TOTALCMD.EXE
-Capslock::Ctrl
+
+GroupAdd, CtrlWClose, ahk_exe 7zFM.exe
+;Capslock::Ctrl
 
 #IfWinNotActive ,ahk_group NeedCtrlN_P
     ^p::Send {Up}
     ^n::Send {Down}
 #IfWinNotActive
 
+PrintScreen::Run c:\Launcher\QQSnapShot.lnk
 ;关闭对话框，改成Alt+4离主键盘更近
 !4::Send, !{F4}
 ;^w::Send !{F4}
@@ -43,17 +46,27 @@ Capslock::Ctrl
 ;^space::return    ;禁用切换中英文输入法
 
 #F::run "C:\launcher\Everything.lnk"
-#G::run "C:\launcher\gvim.lnk"
+#V::run "C:\launcher\gvim.lnk"
+#G::
+    Run cmd 
+    winwait ahk_exe cmd.exe
+    send cd \{Enter}
+    return
+
 #W:: Run C:\Launcher\Wiz.lnk 						;Wiz笔记
-#E:: Run C:\
+;#E:: Run TotalCmd.exe \O C:\       ;这个注释打开后的缺点是，无法查看C盘剩余空间的大小
 #C:: 
     Run cmd 
     winwait ahk_exe cmd.exe
-    send cd \{Enter}cls{Enter}
+    send cd \{Enter}
     return
 
 ^h::Send {Backspace}
 ^j::Send {Enter}
+
+#ifWinActive ahk_group CtrlWClose
+    ^W::Send !{F4}
+#ifWinActive
 
 #IfWinNotActive ahk_group NeedCtrlB
     ^b::Send {Enter}
@@ -87,6 +100,11 @@ Capslock::Ctrl
     ;Wiz笔记中^n是用来创建新的笔记的，而且其中也很少用于上下键
     ;Hotkey, *^n up,off
 
+    ^+E::
+        Click 1208, 119
+        Send e{ESC}
+        return
+
     ^+n::
         MouseClick Right
         send {Down}{Enter}
@@ -97,6 +115,7 @@ Capslock::Ctrl
     LAlt & j::Send {Down}
     LAlt & k::Send {Up}
 
+    ^g::Send {Right}    ;右键常用来展开项目列表
     ^a::Send {Home}
 ; ^e::Send {End}   ;Ctrl+E用来编辑
     ^d::Send {Delete}
@@ -112,9 +131,11 @@ Capslock::Ctrl
         send ^c
         clipwait
         clipboard = %clipboard%.md
-        click, 1200, 156
-        click, 1200, 156
-        click, 1200, 156
+        click, 1090, 120
+        click, 1090, 120
+        click, 1090, 120
+        ;click, 1200, 156
+        ;click, 1200, 156
         send ^v
     return
 #IfWinActive  
@@ -142,7 +163,8 @@ Capslock::Ctrl
         clipwait  ; 等待数据进入剪贴板
    ;     msgbox %clipboard%
         send {ESC}
-        run %clipboard%
+   ;     run %clipboard%
+        run totalCmd.exe /O %clipboard%
         return 
 
 #ifWinActive
@@ -158,21 +180,26 @@ return
 ^!f:: ActivateAndOpen("Mozilla Firefox","c:/Launcher/Firefox.lnk")
 ^!w:: ActivateAndOpen("Microsoft Word", "c:/Launcher/Word.lnk")
 ^!g:: run Lingoes.lnk
-^!l:: Run C:\MyNote\软件\hhkb键位\viewLog.bat
-^!t:: Activate("Total Commander 9.0a - NOT REGISTERED")
+^!l:: Run C:\MyNote\Config\boboAHK\program\viewLog.bat
+
+;^!t:: Activate("Total Commander 9.0a - NOT REGISTERED")
+^!a:: Run totalcmd.lnk
+^!t:: Run totalcmd.exe 
 ^!y:: Run totalcmd.exe /O C:\MyNote\软件\hhkb键位 
 ^!p:: 
     Run cmd.exe
     winwait ahk_exe cmd.exe
     send adb shell{Enter}cd /data/local/sdt/mdm/policy{Enter}
 return
+^+q:: Run c:\Launcher\QQSnapShot.lnk
 
-^!F1:: Run Shutdown -h   ;自动进入休眠状态
+^F1:: Run Shutdown -h   ;自动进入休眠状态
 
 
 ^!i::
     SetWorkingDir %A_ScriptDir%
-    tmpfile=%A_ScriptDir%\ahk_text_edit_in_vim.txt
+    tmpfile=%A_ScriptDir%\%A_Now%ahk_text_edit_in_vim.txt
+    ;tmpfile=%A_ScriptDir%\ahk_text_edit_in_vim.txt
     ;gvim=C:\Program Files\Vim\vim74\gvim.exe
     gvim=c:\launcher\gvim.lnk
     WinGetTitle, active_title, A
@@ -188,6 +215,10 @@ return
         filetype=.java
     else IfInString, active_title, .xml
         filetype=.xml
+    else IfInString, active_title, .c
+        filetype=.c
+    else IfInString, active_title, .h
+        filetype=.h
     else IfInString, active_title, autohot
         filetype=.ahk
     else IfInString, active_title, RStudio
@@ -241,4 +272,5 @@ ActivateAndOpen(t,p)
     return
   }
 }
+
 
