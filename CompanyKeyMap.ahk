@@ -27,19 +27,20 @@ SetWorkingDir %A_ScriptDir%
 
 
 ;^!a:: run totalcmd.exe /O C:\eDisk\13-4G\4Gv2\SecSuit\proj\Linux\auditserver
-^!h:: Run totalcmd.exe /O C:\eDisk\13-4G\4Gv2\SecSuit\proj\commands
-^!s:: Run C:\eDisk\13-4G\4Gv2\SecSuit
+;^!h:: Run totalcmd.exe /O C:\eDisk\13-4G\4Gv2\SecSuit\proj\commands
+;^!s:: Run C:\eDisk\13-4G\4Gv2\SecSuit
 
 ;^!h:: Run C:\eDisk\13-4G\4Gv2\SecSuit\proj\build-ProjectManager-Desktop_Qt_5_2_1_MinGW_32bit-Debug\commands\可信签名
 
 Numpad1::
     ;Run, "c:\eDisk\13-4G\4Gv2\SecSuit\proj\FileExplorerTabActivity\CommitHere.bat"
     ;Run, "C:\eDisk\13-4G\4Gv2\SecSuit\proj\Linux\auditserver\CommitHere.bat"
-    Run "c:\eDisk\13-4G\4Gv2\SecSuit\ko\sdt_software_control\CommitHere.bat"
+    ;Run "c:\eDisk\13-4G\4Gv2\SecSuit\ko\sdt_software_control\CommitHere.bat"
+    Run "E:\hjb\csp\cmn\CommitHere.bat"
 return
 
 Numpad2::
-    Run, "c:\eDisk\13-4G\4Gv2\SecSuit\proj\Klyz\commitHere.bat"
+    Run, "e:\hjb\sdfapi\commitHere.bat"
 return
 
 Numpad3::
@@ -49,3 +50,5 @@ return
 Numpad5::
     send adb shell setprop debug.rootbackdoor 1{Enter}
 return
+
+Numpad9:: run c:\MyNote\c常用表格\减肥体重表.xlsx

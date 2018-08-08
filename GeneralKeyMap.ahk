@@ -64,6 +64,10 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
 ^h::Send {Backspace}
 ^j::Send {Enter}
 
+#ifWinActive ahk_class mintty
+    ^v:: send +{Ins}
+#ifWinActive
+
 #ifWinActive ahk_group CtrlWClose
     ^W::Send !{F4}
 #ifWinActive
@@ -73,6 +77,7 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
 #IfWinNotActive
 
 #IfWinActive ahk_class ConsoleWindowClass
+    ^1::Send  /sdcard/Debug_Log_A1/
     ^l::Send cls{Enter} ;清除屏幕
 ;    ^u::Send ^{Home} ;删除当前行光标前内容
     ^u::Send {Backspace 10}
@@ -83,11 +88,11 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
 ;    ^n::Send {Down} ;下一个命令
     ^b::Send {Left} ;转到前一个字符
     ^f::Send {Right} ;转到后一个字符
-    ^d::Send {Delete} ;删除后一个字符
+;   ^d::Send {Delete} ;删除后一个字符
     ^v::send %Clipboard% ;粘贴
     !b::Send ^{Left} ;前一个单词
     !f::Send ^{Right} ;后一个单词
-    ^w::Send ^{Home}exit{Enter}  ;退出命令行
+    ^d::Send ^{Home}exit{Enter}  ;退出命令行
     ::ad::adb root{Enter}adb remount{Enter}adb shell{Enter}
     ::ps::ps | grep sdt{Enter}kill 
 #ifWinActive
@@ -131,11 +136,9 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
         send ^c
         clipwait
         clipboard = %clipboard%.md
-        click, 1090, 120
-        click, 1090, 120
-        click, 1090, 120
-        ;click, 1200, 156
-        ;click, 1200, 156
+        click, 902, 125
+        click, 902, 125
+        click, 902, 125
         send ^v
     return
 #IfWinActive  
@@ -164,7 +167,7 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
    ;     msgbox %clipboard%
         send {ESC}
    ;     run %clipboard%
-        run totalCmd.exe /O %clipboard%
+        run c:/Launcher/totalCmd.exe.lnk /O %clipboard%
         return 
 
 #ifWinActive
@@ -178,12 +181,13 @@ return
 ^!e::Edit  ; 设定 Ctrl-Alt-E 热键来编辑脚本
 ^!v:: run "C:\launcher\Everything.lnk"
 ^!f:: ActivateAndOpen("Mozilla Firefox","c:/Launcher/Firefox.lnk")
-^!w:: ActivateAndOpen("Microsoft Word", "c:/Launcher/Word.lnk")
-^!g:: run Lingoes.lnk
+^!h:: ActivateAndOpen("Google Chrome","c:/Launcher/chrome.lnk")
+;;^!w:: ActivateAndOpen("Microsoft Word", "c:/Launcher/Word.lnk")
+^!g:: run "C:\Launcher\Lingoes.lnk"
 ^!l:: Run C:\MyNote\Config\boboAHK\program\viewLog.bat
 
 ;^!t:: Activate("Total Commander 9.0a - NOT REGISTERED")
-^!a:: Run totalcmd.lnk
+^!a:: Run C:\launcher\totalcmd.lnk
 ^!t:: Run totalcmd.exe 
 ^!y:: Run totalcmd.exe /O C:\MyNote\软件\hhkb键位 
 ^!p:: 
@@ -273,4 +277,12 @@ ActivateAndOpen(t,p)
   }
 }
 
+#IfWinActive ahk_exe firefox.exe
+    ^d:: ;send i
+        MouseClick Right
+;        msgbox,4100,标题,内容
+        ;sleep 1000
+        send i
+        return 
+#IfWinNotActive
 
