@@ -4,7 +4,7 @@
 #NoEnv 
 
 ;启用提醒，以帮助检测一些常见的错误
-#Warn
+;#Warn
 
 ;新脚本推荐，因为它的出众的速度和可靠性
 ;SendMode Input  
@@ -27,18 +27,77 @@ GroupAdd, NeedCtrlN_P, ahk_exe Wiz.exe
 GroupAdd, NeedCtrlN_P, ahk_class Photoshop
 ;GroupAdd, NeedCtrlN_P, ahk_exe totalcmd.exe
 
+GroupAdd, NeedCtrlD, ahk_class TTOTAL_CMD
+
+;GroupAdd, NeedCtrlB, ahk_exe powerpnt.exe
 GroupAdd, NeedCtrlB, ahk_exe WINWORD.EXE
 GroupAdd, NeedCtrlB, ahk_exe TOTALCMD.EXE
+GroupAdd, NeedCtrlB, ahk_exe AcroRd32.exe
+
+GroupAdd, NeedCtrlH, ahk_exe AcroRd32.exe
+GroupAdd, NeedCtrlH, ahk_class AcrobatSDIWindow
 
 GroupAdd, CtrlWClose, ahk_exe 7zFM.exe
+
+GroupAdd, NeedCtrlE, ahk_exe Wiz.exe
 ;Capslock::Ctrl
+
+$F2::Send {F2}{Right}{Left}
+
+^a::Send {Home}
+^[::Send {ESC}
+
+;#IfWinNotActive ,ahk_group NeedCtrlE
+;    ^e::Send {End}
+;#IfWinNotActive
+
+#IfWinNotActive ahk_group NeedCtrlD
+    ^d::Send {Delete}
+#IfWinNotActive
+
+!h::Send {Left}
+!l::Send {Right}
+!j::Send {Down}
+!k::Send {Up}
+
+;^2:: send, {F2}
+;;; 其实用得最多的还是F2键，重命名文件
+RAlt & 1::Send, {F1}
+RAlt & 2::Send, {F2}
+RAlt & 3::Send, {F3}
+RAlt & 4::Send, {F4}
+RAlt & 5::Send, {F5}
+RAlt & 6::Send, {F6}
+RAlt & 7::Send, {F7}
+RAlt & 8::Send, {F8}
+RAlt & 9::Send, {F9}
+RAlt & 0::Send, {F10}
+RAlt & -::Send, {F11}
+RAlt & =::Send, {F12}
+
+^Enter:: send #^{Right}
+^Backspace:: send #^{Left}
+#ifWinActive, ahk_exe gvim.exe
+    `::Send, {Text}``
+    !Enter::
+        Send, {Text}````
+        send {Left}^{Space}
+        return
+
+    !,:: Send % "{ASC 0" . Asc(",") . "}" ; output ,<
+    !+,:: Send % "{ASC 0" . Asc("<") . "}"
+     
+    ;!.:: Send % "{ASC 0" . Asc(".") . "}"  ; output .>
+    !.:: send {text}.
+    !+.::Send % "{ASC 0" . Asc(">") . "}"
+#IfWinActive 
 
 #IfWinNotActive ,ahk_group NeedCtrlN_P
     ^p::Send {Up}
     ^n::Send {Down}
 #IfWinNotActive
 
-PrintScreen::Run c:\Launcher\QQSnapShot.lnk
+;PrintScreen::Run c:\Launcher\QQSnapShot.lnk
 ;关闭对话框，改成Alt+4离主键盘更近
 !4::Send, !{F4}
 ;^w::Send !{F4}
@@ -54,14 +113,17 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
     return
 
 #W:: Run C:\Launcher\Wiz.lnk 						;Wiz笔记
-;#E:: Run TotalCmd.exe \O C:\       ;这个注释打开后的缺点是，无法查看C盘剩余空间的大小
+#E:: Run TotalCmd64.exe \O C:\       ;这个注释打开后的缺点是，无法查看C盘剩余空间的大小
 #C:: 
     Run cmd 
     winwait ahk_exe cmd.exe
     send cd \{Enter}
     return
 
-^h::Send {Backspace}
+#ifWinNotActive, ahk_group, NeedCtrlH
+    ^h::Send {Backspace}
+#IfWinNotActive
+
 ^j::Send {Enter}
 
 #ifWinActive ahk_class mintty
@@ -72,9 +134,9 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
     ^W::Send !{F4}
 #ifWinActive
 
-#IfWinNotActive ahk_group NeedCtrlB
-    ^b::Send {Enter}
-#IfWinNotActive
+;#IfWinNotActive ahk_group NeedCtrlB
+;    ^b::Send {Enter}
+;#IfWinNotActive
 
 #IfWinActive ahk_class ConsoleWindowClass
     ^1::Send  /sdcard/Debug_Log_A1/
@@ -100,6 +162,13 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
 #ifWinActive ahk_exe qtcreator.exe
     ^s:: send {ESC}:wa{Enter}
 #ifWinActive
+
+#ifWinActive ahk_exe POWERPNT.EXE
+    ^E:: Click 495, 284
+        return 
+#ifWinActive
+
+
 
 #ifWinActive ahk_exe Wiz.exe
     ;Wiz笔记中^n是用来创建新的笔记的，而且其中也很少用于上下键
@@ -181,10 +250,12 @@ return
 ^!e::Edit  ; 设定 Ctrl-Alt-E 热键来编辑脚本
 ^!v:: run "C:\launcher\Everything.lnk"
 ^!f:: ActivateAndOpen("Mozilla Firefox","c:/Launcher/Firefox.lnk")
-^!h:: ActivateAndOpen("Google Chrome","c:/Launcher/chrome.lnk")
+^!o:: ActivateAndOpen("Google Chrome","c:/Launcher/chrome.lnk")
 ;;^!w:: ActivateAndOpen("Microsoft Word", "c:/Launcher/Word.lnk")
 ^!g:: run "C:\Launcher\Lingoes.lnk"
-^!l:: Run C:\MyNote\Config\boboAHK\program\viewLog.bat
+^!l:: send #{Right}
+^!h:: send #{Left}
+
 
 ;^!t:: Activate("Total Commander 9.0a - NOT REGISTERED")
 ^!a:: Run C:\launcher\totalcmd.lnk
@@ -196,6 +267,7 @@ return
     send adb shell{Enter}cd /data/local/sdt/mdm/policy{Enter}
 return
 ^+q:: Run c:\Launcher\QQSnapShot.lnk
+^+w:: Run c:\Launcher\QQSnapShot.lnk
 
 ^F1:: Run Shutdown -h   ;自动进入休眠状态
 
@@ -286,3 +358,117 @@ ActivateAndOpen(t,p)
         return 
 #IfWinNotActive
 
+
+#IfWinActive ahk_class AcrobatSDIWindow
+    h:: 
+    if (inAcrobatSearchMode)
+      Send h
+    else Send {Left}
+    return
+
+    j::
+    if (inAcrobatSearchMode)
+      Send j 
+    else Send {Down}
+    return
+
+    k::
+    if (inAcrobatSearchMode)
+      Send k 
+    else Send {Up}
+    return
+
+    l::
+    if (inAcrobatSearchMode)
+      Send l 
+    else Send {Right}
+    return
+
+    n::
+    if (inAcrobatSearchMode)
+      Send n
+    else Send {F3}{Esc}
+    return
+
+    x::
+    if (inAcrobatSearchMode)
+      Send x
+    else Send ^w
+    return
+
+    +n::
+    if (inAcrobatSearchMode)
+      Send N
+    else Send +{F3}{Esc}
+    return
+
+    +g::
+    if (inAcrobatSearchMode)
+      Send G
+    else Send {End} 
+    return
+
+    ; see http://stackoverflow.com/questions/1794258/detect-a-double-key-press-in-autohotkey
+
+    g::
+    if (inAcrobatSearchMode)
+      Send g
+    else {
+      if (A_PriorHotkey <> "g" or A_TimeSincePriorHotkey > 400) {
+          ; Too much time between presses, so this isn't a double-press.
+          KeyWait, g
+          return
+      }
+      Send {Home}
+    }
+    return
+
+    /::
+    if (inAcrobatSearchMode)
+      Send /
+    else {
+      inAcrobatSearchMode := true
+      Send ^f
+    }
+    return
+
+    Esc::
+    inAcrobatSearchMode := false
+    Send {Esc}
+    return
+
+    ^[::
+    inAcrobatSearchMode := false
+    Send {Esc}
+    return
+
+    Enter::
+    if (inAcrobatSearchMode) {
+      inAcrobatSearchMode := false
+    }
+    Send {Enter}
+    return
+
+    ;go back into normal mode after scrolling with any control command
+
+    ^e::
+    inAcrobatSearchMode := false
+    Send {Esc}{Down}
+    return
+
+    ^y::
+    inAcrobatSearchMode := false
+    Send {Esc}{Up}
+    return
+
+    ^f::
+    inAcrobatSearchMode := false
+    Send {Esc}{PgDn}
+    return
+
+    ^b::
+    inAcrobatSearchMode := false
+    Send {Esc}{PgUp}
+    return
+
+#IfWinActive
