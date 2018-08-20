@@ -105,7 +105,7 @@ RAlt & =::Send, {F12}
 ;^space::return    ;禁用切换中英文输入法
 
 #F::run "C:\launcher\Everything.lnk"
-#V::run "C:\launcher\gvim.lnk"
+#V::run "C:\launcher\gvim.lnk" -p --remote-tab-silent tmp.md
 #G::
     Run cmd 
     winwait ahk_exe cmd.exe
@@ -395,6 +395,31 @@ ActivateAndOpen(t,p)
       Send x
     else Send ^w
     return
+
+    f::
+    if (inAcrobatSearchMode)
+      Send f
+    else Send {Esc}{PgDn}
+    return
+
+    b::
+    if (inAcrobatSearchMode)
+      Send b
+    else Send {Esc}{PgUp}
+    return
+
+    d::
+    if (inAcrobatSearchMode)
+      Send d
+    else Send {Esc}{PgDn}
+    return
+
+    u::
+    if (inAcrobatSearchMode)
+      Send u
+    else Send {Esc}{PgUp}
+    return
+
 
     +n::
     if (inAcrobatSearchMode)
