@@ -28,6 +28,8 @@ GroupAdd, NeedCtrlN_P, ahk_class Photoshop
 ;GroupAdd, NeedCtrlN_P, ahk_exe totalcmd.exe
 
 GroupAdd, NeedCtrlD, ahk_class TTOTAL_CMD
+GroupAdd, NeedCtrlD, ahk_exe firefox.exe
+GroupAdd, NeedCtrlD, ahk_exe vncviewer.exe
 
 ;GroupAdd, NeedCtrlB, ahk_exe powerpnt.exe
 GroupAdd, NeedCtrlB, ahk_exe WINWORD.EXE
@@ -40,11 +42,25 @@ GroupAdd, NeedCtrlH, ahk_class AcrobatSDIWindow
 GroupAdd, CtrlWClose, ahk_exe 7zFM.exe
 
 GroupAdd, NeedCtrlE, ahk_exe Wiz.exe
+GroupAdd, NeedCtrlA, ahk_exe EXCEL.EXE
+
+GroupAdd, NeedSymbol, ahk_exe MobaXterm.exe
+GroupAdd, NeedAltHJKL, ahk_exe MobaXterm.exe
+
+GroupAdd, DocReader, ahk_class SUMATRA_PDF_FRAME
+GroupAdd, DocReader, ahk_exe CAJVieweru.exe
 ;Capslock::Ctrl
 
 $F2::Send {F2}{Right}{Left}
 
+#IfWinNotActive ahk_group NeedCtrlA
 ^a::Send {Home}
+#IfWinNotActive
+
+#IfWinNotActive ahk_group NeedCtrlE
+    ^e::Send {End}
+#IfWinNotActive
+
 ^[::Send {ESC}
 
 ;#IfWinNotActive ,ahk_group NeedCtrlE
@@ -55,28 +71,60 @@ $F2::Send {F2}{Right}{Left}
     ^d::Send {Delete}
 #IfWinNotActive
 
-!h::Send {Left}
-!l::Send {Right}
-!j::Send {Down}
-!k::Send {Up}
+#IfWinNotActive ahk_group NeedAltHJKL
+    !h::Send {Left}
+    !l::Send {Right}
+    !j::Send {Down}
+    !k::Send {Up}
+#IfWinNotActive 
 
+#ifWinActive ahk_exe explorer.exe
+    ^1:: send {F2}
+    ^2:: send {F2}
+#ifWinActive 
 ;^2:: send, {F2}
 ;;; 其实用得最多的还是F2键，重命名文件
-RAlt & 1::Send, {F1}
-RAlt & 2::Send, {F2}
-RAlt & 3::Send, {F3}
-RAlt & 4::Send, {F4}
-RAlt & 5::Send, {F5}
-RAlt & 6::Send, {F6}
-RAlt & 7::Send, {F7}
-RAlt & 8::Send, {F8}
-RAlt & 9::Send, {F9}
-RAlt & 0::Send, {F10}
-RAlt & -::Send, {F11}
-RAlt & =::Send, {F12}
+;RAlt & 1::Send, {F1}
+;RAlt & 2::Send, {F2}
+;RAlt & 3::Send, {F3}
+;RAlt & 4::Send, {F4}
+;RAlt & 5::Send, {F5}
+;RAlt & 6::Send, {F6}
+;RAlt & 7::Send, {F7}
+;RAlt & 8::Send, {F8}
+;RAlt & 9::Send, {F9}
+;RAlt & 0::Send, {F10}
+;RAlt & -::Send, {F11}
+;RAlt & =::Send, {F12}
 
+;;;;; TC快捷键
+#ifWinActive ahk_exe TOTALCMD64.EXE
+    ^1::Send, {F1}
+    ^2::Send, {F2}
+    ^3::Send, {F3}
+    ^4::Send, {F4}
+    ^5::Send, {F5}
+    ^6::Send, {F6}
+    ^7::Send, {F7}
+    ^8::Send, {F8}
+    ^9::Send, {F9}
+#ifWinActive
+
+;;;;; 虚拟桌面
 ^Enter:: send #^{Right}
 ^Backspace:: send #^{Left}
+;d:: send #m
+
+;;;;;; 中英文标点
+#ifWinNotActive ahk_group NeedSymbol
+    !.:: send {text}.
+    !/:: send {text}/
+    !9:: send {text}(
+    !0:: send {text})
+    !;:: send {text}:
+#IfWinNotActive
+
+
 #ifWinActive, ahk_exe gvim.exe
     `::Send, {Text}``
     !Enter::
@@ -97,7 +145,7 @@ RAlt & =::Send, {F12}
     ^n::Send {Down}
 #IfWinNotActive
 
-;PrintScreen::Run c:\Launcher\QQSnapShot.lnk
+PrintScreen::Run c:\Launcher\QQSnapShot.lnk
 ;关闭对话框，改成Alt+4离主键盘更近
 !4::Send, !{F4}
 ;^w::Send !{F4}
@@ -113,7 +161,7 @@ RAlt & =::Send, {F12}
     return
 
 #W:: Run C:\Launcher\Wiz.lnk 						;Wiz笔记
-#E:: Run TotalCmd64.exe \O C:\       ;这个注释打开后的缺点是，无法查看C盘剩余空间的大小
+#E:: Run TotalCmd.exe \O C:\       ;这个注释打开后的缺点是，无法查看C盘剩余空间的大小
 #C:: 
     Run cmd 
     winwait ahk_exe cmd.exe
@@ -163,12 +211,12 @@ RAlt & =::Send, {F12}
     ^s:: send {ESC}:wa{Enter}
 #ifWinActive
 
+;;;;;; ppt
 #ifWinActive ahk_exe POWERPNT.EXE
     ^E:: Click 495, 284
         return 
+    ^1:: send +{F5}
 #ifWinActive
-
-
 
 #ifWinActive ahk_exe Wiz.exe
     ;Wiz笔记中^n是用来创建新的笔记的，而且其中也很少用于上下键
@@ -241,8 +289,9 @@ RAlt & =::Send, {F12}
 
 #ifWinActive
 
+;;;;;;;;;;;; 全局快捷键
 ^!r::
-    send {ESC}:update{Enter}
+    ;;send {ESC}:update{Enter}
     Reload  ; 设定 Ctrl-Alt-R 热键来重启脚本.
 return 
 
@@ -252,14 +301,14 @@ return
 ^!f:: ActivateAndOpen("Mozilla Firefox","c:/Launcher/Firefox.lnk")
 ^!o:: ActivateAndOpen("Google Chrome","c:/Launcher/chrome.lnk")
 ;;^!w:: ActivateAndOpen("Microsoft Word", "c:/Launcher/Word.lnk")
-^!g:: run "C:\Launcher\Lingoes.lnk"
+^!g:: run "C:\Launcher\YouDao.lnk"
 ^!l:: send #{Right}
 ^!h:: send #{Left}
 
 
-;^!t:: Activate("Total Commander 9.0a - NOT REGISTERED")
+^!t:: Run C:\launcher\RunZ.ahk.lnk
+^!w:: Run C:\Program Files (x86)\Tencent\WeChat\WeChat.exe
 ^!a:: Run C:\launcher\totalcmd.lnk
-^!t:: Run totalcmd.exe 
 ^!y:: Run totalcmd.exe /O C:\MyNote\软件\hhkb键位 
 ^!p:: 
     Run cmd.exe
@@ -358,12 +407,79 @@ ActivateAndOpen(t,p)
         return 
 #IfWinNotActive
 
+;ahk_exe SumatraPDF.exe
+;#IfWinActive ahk_class SUMATRA_PDF_FRAME
+;    ;;j:: send {PgDn}
+;    ;;k:: return
+;    f:: send {ESC}{PgDn}
+;    g:: send ^{Home}
+;    +g:: send ^{End}
+;    b:: send {PgUp}
+;#IfWinActive
+
+#IfWinActive ahk_group DocReader
+    j:: send {Down}{Down}{Down}{Down}
+    k:: send {up}{up}{up}{up}
+    d::
+    f:: send {ESC}{PgDn}
+
+    g:: send ^{Home}
+    +g:: send ^{End}
+
+    u::
+    b:: send {PgUp}
+#IfWinActive 
+
+;;;;; 删除复制的回车
+#IfWinActive ahk_class SUMATRA_PDF_FRAME
+    ;原复制功能由Win+Ctrl+C替代
+#^c::^c
+
+    ^c::
+    ;防误触暂停
+    Sleep 15
+    ;使用ALT做热键，请设置延迟
+       tmp := supercopy()
+       if (tmp=658958955595158099999){
+       MsgBox ,16, 复制出错,未能复制到内容，替换无法进行
+       return
+       }	
+        ;替换换行符
+        out:= RegExReplace(tmp, "(\S.*?)\R(.*?\S)", "$1$2")	 
+        ;复制替换后会弹出提示通知，如果不需要就注释掉
+        TrayTip,PDF文本替换复制,替换后的内容为:`n%out%,,1
+        Clipboard:=out
+    return
+    supercopy(){
+    ;~ tcopy(){
+        old := ClipboardAll
+    Clipboard :=""
+    Send ^c
+    ClipWait,1
+    ;防误触暂停
+    Sleep 55
+    if(ErrorLevel = 1){
+        TrayTip,超级复制,复制失败,,1
+        return 658958955595158099999
+    }
+    ;防误触暂停
+    Sleep 15
+    show := Clipboard
+    TrayTip,超级复制,复制出的内容为:`n%show%,,1
+    Clipboard := old
+    Sleep 15
+    return %show%
+}
+#IfWinActive
+
+
+
 
 #IfWinActive ahk_class AcrobatSDIWindow
     h:: 
     if (inAcrobatSearchMode)
       Send h
-    else Send {Left}
+    else Send !{Left}
     return
 
     j::
@@ -381,7 +497,7 @@ ActivateAndOpen(t,p)
     l::
     if (inAcrobatSearchMode)
       Send l 
-    else Send {Right}
+    else Send !{Right}
     return
 
     n::
@@ -497,3 +613,11 @@ ActivateAndOpen(t,p)
     return
 
 #IfWinActive
+
+
+;;;;;远程电脑的一些设置
+Numpad1::Edit 
+Numpad0::
+    send {ESC}:update{Enter}
+    Reload  
+return 
