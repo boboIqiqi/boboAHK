@@ -27,4 +27,12 @@ SetWorkingDir %A_ScriptDir%
 ;#Inc_ScriptDir%\vim.ahk
 ;#Inc_ScriptDir%\vim_ime.ahk
 
-^!h:: Run C:\MyNote\Config\boboAHK
+
+GroupAdd, NeedCtrlH, ahk_exe AcroRd32.exe
+GroupAdd, NeedCtrlH, ahk_class AcrobatSDIWindow
+
+#ifWinNotActive, ahk_group, NeedCtrlH
+    ^h::Send {Backspace}
+#IfWinNotActive
+
+^j::Send {Enter}
