@@ -19,17 +19,27 @@ SetWorkingDir %A_ScriptDir%
 ; * 通配符: 即使附加的修饰键被按住也能激发热键. 这常与 重映射 按键或按钮组合使用.
 ; ~ 激发热键时，不会屏蔽（被操作系统隐藏）热键中按键原有的功能
 ; $ 通常只在脚本使用 Send 命令发送包含了热键自身的按键时才需要使用此符号, 此时可以避免触发它自己. $ 前缀强制使用 键盘钩子 来实现此热键, 作为一个副作用这样避免了 Send 命令触发它自己. 
-; $ 前缀相当于在此热键定义之前的某个位置指定了 #UseHook。
-; UP 可以跟在热键名后面使得在释放按键时触发热键, 而不是按下时. 下面的例子把 LWin 重映射 为 LControl: *LWin::Send {LControl Down} *LWin Up::Send {LControl Up}
+; $ 前缀相当于在此热键定义之前的某个位置指定了 #UseHook。 ; UP 可以跟在热键名后面使得在释放按键时触发热键, 而不是按下时. 下面的例子把 LWin 重映射 为 LControl: *LWin::Send {LControl Down} *LWin Up::Send {LControl Up}
 
 GroupAdd, NeedCtrlN_P, ahk_class Vim
+GroupAdd, NeedCtrlN_P, ahk_exe totalcmd.exe
 GroupAdd, NeedCtrlN_P, ahk_exe Wiz.exe 
 GroupAdd, NeedCtrlN_P, ahk_class Photoshop
-;GroupAdd, NeedCtrlN_P, ahk_exe totalcmd.exe
+GroupAdd, NeedCtrlN_P, ahk_exe vncviewer.exe
+GroupAdd, NeedCtrlN_P, ahk_exe vnc2.exe
+GroupAdd, NeedCtrlN_P, ahk_exe MobaXterm.exe
+GroupAdd, NeedAlt4, ahk_exe vncviewer.exe
+GroupAdd, NeedAlt4, ahk_exe vnc2.exe
+ 
 
-GroupAdd, NeedCtrlD, ahk_class TTOTAL_CMD
+;GroupAdd, NeedCtrlN_P, ahk_exe totalcmd.exe
+;GroupAdd, NeedCtrlD, ahk_class TTOTAL_CMD
 GroupAdd, NeedCtrlD, ahk_exe firefox.exe
 GroupAdd, NeedCtrlD, ahk_exe vncviewer.exe
+GroupAdd, NeedCtrlD, ahk_exe eclipse.exe
+GroupAdd, NeedCtrlD, ahk_class Vim
+GroupAdd, NeedCtrlD, ahk_exe MobaXterm.exe
+;GroupAdd, NeedCtrlD, ahk_exe WINWORD.EXE
 
 ;GroupAdd, NeedCtrlB, ahk_exe powerpnt.exe
 GroupAdd, NeedCtrlB, ahk_exe WINWORD.EXE
@@ -42,16 +52,40 @@ GroupAdd, NeedCtrlH, ahk_class AcrobatSDIWindow
 GroupAdd, CtrlWClose, ahk_exe 7zFM.exe
 
 GroupAdd, NeedCtrlE, ahk_exe Wiz.exe
+GroupAdd, NeedCtrlE, ahk_class Vim
+GroupAdd, NeedCtrlE, ahk_exe MobaXterm.exe
+GroupAdd, NeedCtrlA, ahk_exe MobaXterm.exe
+GroupAdd, NeedCtrlE, ahk_exe vncviewer.exe
+GroupAdd, NeedCtrlE, ahk_exe vnc2.exe
+GroupAdd, NeedCtrlA, ahk_exe vnc2.exe
+GroupAdd, NeedCtrlA, ahk_exe vncviewer.exe
 GroupAdd, NeedCtrlA, ahk_exe EXCEL.EXE
+GroupAdd, NeedCtrlA, ahk_class Vim
+GroupAdd, NeedCtrlA, ahk_class TFormTextEditor
+GroupAdd, NeedCtrlA, ahk_exe iexplore.exe
 
 GroupAdd, NeedSymbol, ahk_exe MobaXterm.exe
+GroupAdd, NeedSymbol, ahk_exe vncviewer.exe
+
 GroupAdd, NeedAltHJKL, ahk_exe MobaXterm.exe
 
 GroupAdd, DocReader, ahk_class SUMATRA_PDF_FRAME
 GroupAdd, DocReader, ahk_exe CAJVieweru.exe
 ;Capslock::Ctrl
 
+GroupAdd, VNCGroup, ahk_exe vncviewer.exe
+GroupAdd, VNCGroup, ahk_exe vnc2.exe
 $F2::Send {F2}{Right}{Left}
+
+#IfWinActive ahk_group VNCGroup
+    ^2:: Send 19880423{ENTER}
+    ;;^3:: send gnome-terminal{ENTER}
+    ^3:: 
+        send ssh -XY tds042{ENTER}
+        sleep 300
+        send 19880423{ENTER}
+        return 
+#IfWinActive
 
 #IfWinNotActive ahk_group NeedCtrlA
 ^a::Send {Home}
@@ -61,7 +95,7 @@ $F2::Send {F2}{Right}{Left}
     ^e::Send {End}
 #IfWinNotActive
 
-^[::Send {ESC}
+;^[::Send {ESC}
 
 ;#IfWinNotActive ,ahk_group NeedCtrlE
 ;    ^e::Send {End}
@@ -77,6 +111,7 @@ $F2::Send {F2}{Right}{Left}
     !j::Send {Down}
     !k::Send {Up}
 #IfWinNotActive 
+
 
 #ifWinActive ahk_exe explorer.exe
     ^1:: send {F2}
@@ -147,7 +182,11 @@ $F2::Send {F2}{Right}{Left}
 
 PrintScreen::Run c:\Launcher\QQSnapShot.lnk
 ;关闭对话框，改成Alt+4离主键盘更近
-!4::Send, !{F4}
+
+#IfWinNotActive ,ahk_group NeedAlt4
+    !4::Send, !{F4}
+#IfWinNotActive 
+
 ;^w::Send !{F4}
 +space::return    ;禁用切换全角与半角，一直使用半角字符
 ;^space::return    ;禁用切换中英文输入法
@@ -161,7 +200,8 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
     return
 
 #W:: Run C:\Launcher\Wiz.lnk 						;Wiz笔记
-#E:: Run TotalCmd.exe \O C:\       ;这个注释打开后的缺点是，无法查看C盘剩余空间的大小
+#E:: Run C:\Launcher\TotalCmd.lnk \O d:\MyNote\working\       ;这个注释打开后的缺点是，无法查看C盘剩余空间的大小
+;#E:: run D:\MyNote\working
 #C:: 
     Run cmd 
     winwait ahk_exe cmd.exe
@@ -222,9 +262,13 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
     ;Wiz笔记中^n是用来创建新的笔记的，而且其中也很少用于上下键
     ;Hotkey, *^n up,off
 
-    ^+E::
-        Click 1208, 119
-        Send e{ESC}
+    ;:w{Enter}::send i^s
+    ;:::w::send i^s
+
+    ^e:: send ^e{f11}
+    ^r::
+        Click 1640, 124
+        Send g{Enter}
         return
 
     ^+n::
@@ -243,21 +287,21 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
     ^d::Send {Delete}
     ^h::Send {Backspace}
 
-    ^r:: 
-       ; mousemove 665,191
-       ; MouseClickDrag,Left, 655, 191, 685,191
-       ; MouseClickDrag,Left, 655, 191, 665,191
-        Send +{End}
-        clipboard =
-        send ^c
-        send ^c
-        clipwait
-        clipboard = %clipboard%.md
-        click, 902, 125
-        click, 902, 125
-        click, 902, 125
-        send ^v
-    return
+;    ^r:: 
+;       ; mousemove 665,191
+;       ; MouseClickDrag,Left, 655, 191, 685,191
+;       ; MouseClickDrag,Left, 655, 191, 665,191
+;        Send +{End}
+;        clipboard =
+;        send ^c
+;        send ^c
+;        clipwait
+;        clipboard = %clipboard%.md
+;        click, 902, 125
+;        click, 902, 125
+;        click, 902, 125
+;        send ^v
+;    return
 #IfWinActive  
 
 #IfWinActive ahk_class Photoshop
@@ -283,13 +327,25 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
         clipwait  ; 等待数据进入剪贴板
    ;     msgbox %clipboard%
         send {ESC}
-   ;     run %clipboard%
-        run c:/Launcher/totalCmd.exe.lnk /O %clipboard%
+        run %clipboard%
+   ;     run c:/Launcher/totalCmd.lnk /O %clipboard%
         return 
-
+    ^d:: send {Pgdn}
+    ^1:: send !+xj
+    ^2:: send !+dj
+    ^4:: send {f5}
+    ^3:: send {f6}
 #ifWinActive
 
 ;;;;;;;;;;;; 全局快捷键
+
+^1::
+    ActivateAndOpen("huangjb (vnc_huangjb) - VNC Viewer","")
+    ;Run "D:\Program Files\RealVNC\VNC Viewer\vncviewer.exe"
+    WinActivate
+    Send 19880423{ENTER}
+    return 
+
 ^!r::
     ;;send {ESC}:update{Enter}
     Reload  ; 设定 Ctrl-Alt-R 热键来重启脚本.
@@ -304,10 +360,23 @@ return
 ^!g:: run "C:\Launcher\YouDao.lnk"
 ^!l:: send #{Right}
 ^!h:: send #{Left}
+^!k:: run "C:\Program Files (x86)\Microsoft Office\root\Office16\onenote.exe"
 
+;;^!t:: Run C:\launcher\RunZ.ahk.lnk
+^!m:: Run C:\launcher\MobaXterm.lnk
+^!n:: Run C:\launcher\vnc.lnk
+^!s:: 
+    Run C:\launcher\VMP.lnk
+    sleep 500
+    send {Down}!l
+    Run C:\launcher\MobaXterm.lnk
+    return
 
-^!t:: Run C:\launcher\RunZ.ahk.lnk
-^!w:: Run C:\Program Files (x86)\Tencent\WeChat\WeChat.exe
+^!w:: 
+    Run C:\Program Files (x86)\Tencent\WeChat\WeChat.exe
+    ;sleep 300
+    Send {Enter}
+    return 
 ^!a:: Run C:\launcher\totalcmd.lnk
 ^!y:: Run totalcmd.exe /O C:\MyNote\软件\hhkb键位 
 ^!p:: 
@@ -315,15 +384,20 @@ return
     winwait ahk_exe cmd.exe
     send adb shell{Enter}cd /data/local/sdt/mdm/policy{Enter}
 return
-^+q:: Run c:\Launcher\QQSnapShot.lnk
+^!z:: MouseClickDrag, left, 1553, 878, 624, -20
+
+
+;^+q:: Run c:\Launcher\SnapShot.exe
+;^+w:: Run c:\Launcher\SnapShot.exe
+^+q:: send {F1}
 ^+w:: Run c:\Launcher\QQSnapShot.lnk
 
-^F1:: Run Shutdown -h   ;自动进入休眠状态
+;^F1:: Run Shutdown -h   ;自动进入休眠状态
 
 
 ^!i::
     SetWorkingDir %A_ScriptDir%
-    tmpfile=%A_ScriptDir%\%A_Now%ahk_text_edit_in_vim.txt
+    tmpfile=%A_ScriptDir%\%A_Now%ahk_text_edit_in_vim.md
     ;tmpfile=%A_ScriptDir%\ahk_text_edit_in_vim.txt
     ;gvim=C:\Program Files\Vim\vim74\gvim.exe
     gvim=c:\launcher\gvim.lnk
@@ -350,7 +424,7 @@ return
         filetype=.R
     else IfInString, active_title, studio
         filetype=.cpp
-    else filetype =
+    else filetype =.md
 
  ;   Msgbox, %fileType%
 
@@ -359,7 +433,7 @@ return
     tmpfile=%tmpfile%%filetype%
 
     FileAppend, %clipboard%, %tmpfile%, UTF-8
-
+    send ^{space}
     runwait, %gvim% "%tmpfile%" +
     fileread , text, %tmpfile%
     clipboard := text ; 还原读取的数据到剪贴板
@@ -405,6 +479,7 @@ ActivateAndOpen(t,p)
         ;sleep 1000
         send i
         return 
+    ^/:: send ^f
 #IfWinNotActive
 
 ;ahk_exe SumatraPDF.exe
@@ -420,6 +495,9 @@ ActivateAndOpen(t,p)
 #IfWinActive ahk_group DocReader
     j:: send {Down}{Down}{Down}{Down}
     k:: send {up}{up}{up}{up}
+    h:: send {Left}{Left}
+    l:: send {Right}{Right}
+
     d::
     f:: send {ESC}{PgDn}
 
@@ -432,8 +510,9 @@ ActivateAndOpen(t,p)
 
 ;;;;; 删除复制的回车
 #IfWinActive ahk_class SUMATRA_PDF_FRAME
+    ^2::send {F12}
     ;原复制功能由Win+Ctrl+C替代
-#^c::^c
+    #^c::^c
 
     ^c::
     ;防误触暂停
@@ -471,8 +550,6 @@ ActivateAndOpen(t,p)
     return %show%
 }
 #IfWinActive
-
-
 
 
 #IfWinActive ahk_class AcrobatSDIWindow
