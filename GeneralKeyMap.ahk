@@ -28,6 +28,7 @@ GroupAdd, NeedCtrlN_P, ahk_class Photoshop
 GroupAdd, NeedCtrlN_P, ahk_exe vncviewer.exe
 GroupAdd, NeedCtrlN_P, ahk_exe vnc2.exe
 GroupAdd, NeedCtrlN_P, ahk_exe MobaXterm.exe
+GroupAdd, NeedCtrlN_P, ahk_exe putty.exe
 GroupAdd, NeedAlt4, ahk_exe vncviewer.exe
 GroupAdd, NeedAlt4, ahk_exe vnc2.exe
  
@@ -36,9 +37,12 @@ GroupAdd, NeedAlt4, ahk_exe vnc2.exe
 ;GroupAdd, NeedCtrlD, ahk_class TTOTAL_CMD
 GroupAdd, NeedCtrlD, ahk_exe firefox.exe
 GroupAdd, NeedCtrlD, ahk_exe vncviewer.exe
+GroupAdd, NeedCtrlD, ahk_exe vnc2.exe
 GroupAdd, NeedCtrlD, ahk_exe eclipse.exe
 GroupAdd, NeedCtrlD, ahk_class Vim
 GroupAdd, NeedCtrlD, ahk_exe MobaXterm.exe
+GroupAdd, NeedCtrlD, ahk_exe putty.exe
+GroupAdd, NeedCtrlD, ahk_exe VISIO.EXE
 ;GroupAdd, NeedCtrlD, ahk_exe WINWORD.EXE
 
 ;GroupAdd, NeedCtrlB, ahk_exe powerpnt.exe
@@ -54,7 +58,9 @@ GroupAdd, CtrlWClose, ahk_exe 7zFM.exe
 GroupAdd, NeedCtrlE, ahk_exe Wiz.exe
 GroupAdd, NeedCtrlE, ahk_class Vim
 GroupAdd, NeedCtrlE, ahk_exe MobaXterm.exe
+GroupAdd, NeedCtrlE, ahk_exe putty.exe
 GroupAdd, NeedCtrlA, ahk_exe MobaXterm.exe
+GroupAdd, NeedCtrlA, ahk_exe putty.exe
 GroupAdd, NeedCtrlE, ahk_exe vncviewer.exe
 GroupAdd, NeedCtrlE, ahk_exe vnc2.exe
 GroupAdd, NeedCtrlA, ahk_exe vnc2.exe
@@ -63,11 +69,15 @@ GroupAdd, NeedCtrlA, ahk_exe EXCEL.EXE
 GroupAdd, NeedCtrlA, ahk_class Vim
 GroupAdd, NeedCtrlA, ahk_class TFormTextEditor
 GroupAdd, NeedCtrlA, ahk_exe iexplore.exe
+GroupAdd, NeedCtrlA, ahk_exe YoudaoDict.exe
+GroupAdd, NeedCtrlA, ahk_exe wdtp.exe
 
 GroupAdd, NeedSymbol, ahk_exe MobaXterm.exe
+GroupAdd, NeedSymbol, ahk_exe putty.exe
 GroupAdd, NeedSymbol, ahk_exe vncviewer.exe
 
 GroupAdd, NeedAltHJKL, ahk_exe MobaXterm.exe
+GroupAdd, NeedAltHJKL, ahk_exe putty.exe
 
 GroupAdd, DocReader, ahk_class SUMATRA_PDF_FRAME
 GroupAdd, DocReader, ahk_exe CAJVieweru.exe
@@ -76,6 +86,12 @@ GroupAdd, DocReader, ahk_exe CAJVieweru.exe
 GroupAdd, VNCGroup, ahk_exe vncviewer.exe
 GroupAdd, VNCGroup, ahk_exe vnc2.exe
 $F2::Send {F2}{Right}{Left}
+
+
+#ifWinactive ahk_exe WINWORD.EXE
+    ^f:: Send $^D
+#ifWinactive
+
 
 #IfWinActive ahk_group VNCGroup
     ^2:: Send 19880423{ENTER}
@@ -90,6 +106,11 @@ $F2::Send {F2}{Right}{Left}
 #IfWinNotActive ahk_group NeedCtrlA
 ^a::Send {Home}
 #IfWinNotActive
+
+#IfWinNotActive ahk_exe vmplayer.exe
+#IfWinNotActive
+^!q:: send {F1}
+
 
 #IfWinNotActive ahk_group NeedCtrlE
     ^e::Send {End}
@@ -112,11 +133,26 @@ $F2::Send {F2}{Right}{Left}
     !k::Send {Up}
 #IfWinNotActive 
 
-
 #ifWinActive ahk_exe explorer.exe
     ^1:: send {F2}
     ^2:: send {F2}
 #ifWinActive 
+
+#ifWinActive ahk_exe TypeEasy.exe
+    ^1:: 
+        send {ESC}
+        click 730, 608
+        return
+
+    
+    ~ESC:: 
+        send {ESC}
+        sleep 600
+        click 730, 608
+        return
+#ifWinActive 
+
+
 ;^2:: send, {F2}
 ;;; 其实用得最多的还是F2键，重命名文件
 ;RAlt & 1::Send, {F1}
@@ -180,7 +216,6 @@ $F2::Send {F2}{Right}{Left}
     ^n::Send {Down}
 #IfWinNotActive
 
-PrintScreen::Run c:\Launcher\QQSnapShot.lnk
 ;关闭对话框，改成Alt+4离主键盘更近
 
 #IfWinNotActive ,ahk_group NeedAlt4
@@ -192,15 +227,15 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
 ;^space::return    ;禁用切换中英文输入法
 
 #F::run "C:\launcher\Everything.lnk"
-#V::run "C:\launcher\gvim.lnk" -p --remote-tab-silent tmp.md
-#G::
-    Run cmd 
-    winwait ahk_exe cmd.exe
-    send cd \{Enter}
-    return
+#V::run "C:\Program Files (x86)\Vim\vim81\gvim.exe" -p --remote-tab-silent tmp.md
+;#G::
+;    Run cmd 
+;    winwait ahk_exe cmd.exe
+;    send cd \{Enter}
+;    return
 
 #W:: Run C:\Launcher\Wiz.lnk 						;Wiz笔记
-#E:: Run C:\Launcher\TotalCmd.lnk \O d:\MyNote\working\       ;这个注释打开后的缺点是，无法查看C盘剩余空间的大小
+#E:: Run C:\Launcher\TotalCmd.lnk
 ;#E:: run D:\MyNote\working
 #C:: 
     Run cmd 
@@ -265,10 +300,12 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
     ;:w{Enter}::send i^s
     ;:::w::send i^s
 
-    ^e:: send ^e{f11}
-    ^r::
+    ^e:: send ^e
+    ^x:: send {f11}
+    ^2::
         Click 1640, 124
-        Send g{Enter}
+       ; Send g{Enter}
+        Send e
         return
 
     ^+n::
@@ -287,21 +324,17 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
     ^d::Send {Delete}
     ^h::Send {Backspace}
 
-;    ^r:: 
-;       ; mousemove 665,191
-;       ; MouseClickDrag,Left, 655, 191, 685,191
-;       ; MouseClickDrag,Left, 655, 191, 665,191
-;        Send +{End}
-;        clipboard =
-;        send ^c
-;        send ^c
-;        clipwait
-;        clipboard = %clipboard%.md
-;        click, 902, 125
-;        click, 902, 125
-;        click, 902, 125
-;        send ^v
-;    return
+    ^r:: 
+       ; mousemove 665,191
+       ; MouseClickDrag,Left, 655, 191, 685,191
+       ; MouseClickDrag,Left, 655, 191, 665,191
+        Send +{End}
+        clipboard =
+        send ^c
+        send ^c
+        clipwait
+        clipboard = %clipboard%.md
+    return
 #IfWinActive  
 
 #IfWinActive ahk_class Photoshop
@@ -338,13 +371,12 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
 #ifWinActive
 
 ;;;;;;;;;;;; 全局快捷键
-
-^1::
-    ActivateAndOpen("huangjb (vnc_huangjb) - VNC Viewer","")
-    ;Run "D:\Program Files\RealVNC\VNC Viewer\vncviewer.exe"
-    WinActivate
-    Send 19880423{ENTER}
-    return 
+;^1::
+;    ActivateAndOpen("vnc_huangjb - TigerVNC","")
+;    ;Run "D:\Program Files\RealVNC\VNC Viewer\vncviewer.exe"
+;    WinActivate
+;    Send 19880423{ENTER}
+;    return 
 
 ^!r::
     ;;send {ESC}:update{Enter}
@@ -352,18 +384,22 @@ PrintScreen::Run c:\Launcher\QQSnapShot.lnk
 return 
 
 ^!d:: run "C:/Launcher/RemoveDrive.lnk"
-^!e::Edit  ; 设定 Ctrl-Alt-E 热键来编辑脚本
+^!e:: Edit  ; 设定 Ctrl-Alt-E 热键来编辑脚本
 ^!v:: run "C:\launcher\Everything.lnk"
 ^!f:: ActivateAndOpen("Mozilla Firefox","c:/Launcher/Firefox.lnk")
 ^!o:: ActivateAndOpen("Google Chrome","c:/Launcher/chrome.lnk")
+^!g:: Run C:\Launcher\Wiz.lnk 					;
+
 ;;^!w:: ActivateAndOpen("Microsoft Word", "c:/Launcher/Word.lnk")
-^!g:: run "C:\Launcher\YouDao.lnk"
+^!c:: run "C:\Launcher\YouDao.lnk"
 ^!l:: send #{Right}
 ^!h:: send #{Left}
 ^!k:: run "C:\Program Files (x86)\Microsoft Office\root\Office16\onenote.exe"
 
 ;;^!t:: Run C:\launcher\RunZ.ahk.lnk
-^!m:: Run C:\launcher\MobaXterm.lnk
+^!x:: Run C:\launcher\MobaXterm.lnk
+^!u:: ActivateAndOpen("192.168.32.32 - PuTTY", "C:\launcher\putty.lnk")
+^!m:: run "C:\Program Files (x86)\Vim\vim81\gvim.exe" -p --remote-tab-silent tmp.md
 ^!n:: Run C:\launcher\vnc.lnk
 ^!s:: 
     Run C:\launcher\VMP.lnk
@@ -377,7 +413,7 @@ return
     ;sleep 300
     Send {Enter}
     return 
-^!a:: Run C:\launcher\totalcmd.lnk
+^!a:: Run D:\software\turnoffdisplay\关闭屏幕.exe
 ^!y:: Run totalcmd.exe /O C:\MyNote\软件\hhkb键位 
 ^!p:: 
     Run cmd.exe
@@ -434,7 +470,8 @@ return
 
     FileAppend, %clipboard%, %tmpfile%, UTF-8
     send ^{space}
-    runwait, %gvim% "%tmpfile%" +
+    ;runwait, %gvim% -p --remote-tab-silent "%tmpfile%" +
+    runwait, %gvim% "%tmpfile%"
     fileread , text, %tmpfile%
     clipboard := text ; 还原读取的数据到剪贴板
     winwait %active_title% ; 等待刚才获取文字的窗口激活
@@ -524,7 +561,7 @@ ActivateAndOpen(t,p)
        return
        }	
         ;替换换行符
-        out:= RegExReplace(tmp, "(\S.*?)\R(.*?\S)", "$1$2")	 
+        out:= RegExReplace(tmp, "(\S.*?)\R(.*?\S)", "$1 $2")	 
         ;复制替换后会弹出提示通知，如果不需要就注释掉
         TrayTip,PDF文本替换复制,替换后的内容为:`n%out%,,1
         Clipboard:=out
@@ -698,3 +735,48 @@ Numpad0::
     send {ESC}:update{Enter}
     Reload  
 return 
+
+
+;;;;;;;;;;;;;;;;;右键菜单进行omnipeek的设置
+#ifWinactive ahk_class OmniPeek
+    ^!d::send ^y^y
+    RButton::
+    RButtonCount++
+    if RButtonCount=1
+        SetTimer,CheckR,-1000
+    if RButtonCount=1
+    KeyWait,RButton,U,T0.8
+    if ErrorLevel
+        RButtonCount1:=1
+    else 
+    {
+        KeyWait,RButton,D,T0.1
+        if ErrorLevel
+            RButtonCount1:=2
+        else
+        {
+            RButtonCount++
+            RButtonCount1:=3
+        }
+    }
+    if RButtonCount1=1
+            Menu, tray, Show
+    else if RButtonCount1=2
+            Send {RButton}l
+    else if RButtonCount1=3
+            Send ^v
+    if  (RButtonCount1=1 || RButtonCount1=3)
+        gosub,RCount
+    Return
+
+    RCount:
+    RButtonCount:=0
+    RButtonCount1:=0
+    return
+
+    CheckR:
+    if (RButtonCount=1 && RButtonCount1=2)
+        gosub,RCount
+    return
+#ifWinactive
+
